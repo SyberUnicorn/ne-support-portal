@@ -4,3 +4,421 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Era RTC — Technology Support Request</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4F8;min-height:100vh}
+.portal-header{background:#0E2F42;color:white;padding:2rem;text-align:center}
+.portal-header .brand{font-size:11px;font-weight:700;letter-spacing:.15em;opacity:.6;text-transform:uppercase;margin-bottom:.4rem}
+.portal-header h1{font-size:1.6rem;font-weight:700;margin-bottom:.25rem}
+.portal-header .sub{font-size:12px;opacity:.55;letter-spacing:.12em;text-transform:uppercase;margin-top:.5rem}
+.info-box{background:#E8F4FD;border-left:4px solid #2196F3;padding:1rem 1.25rem;margin:1.5rem auto;max-width:700px;border-radius:0 6px 6px 0;font-size:13px;color:#1A4A6B}
+.container{max-width:700px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.card{background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:1.25rem;overflow:hidden}
+.card-header{background:#F7F9FC;border-bottom:1px solid #E8EDF2;padding:.75rem 1.25rem;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6B7A8A}
+.card-body{padding:1.25rem}
+.field{margin-bottom:1.1rem}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:13px;font-weight:600;color:#2C3E50;margin-bottom:.4rem}
+label .req{color:#E74C3C;margin-left:2px}
+label .opt{font-size:11px;font-weight:400;color:#95A5A6;margin-left:4px}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;padding:.6rem .85rem;border:1.5px solid #DDE3E8;border-radius:6px;font-size:14px;color:#2C3E50;background:white;transition:border-color .2s;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#0E2F42;box-shadow:0 0 0 3px rgba(14,47,66,.08)}
+textarea{resize:vertical;min-height:100px}
+optgroup{font-weight:700}
+/* PlanStreet section */
+.ps-section{display:none;background:#F0F7F4;border:1.5px solid #1A7A6E;border-radius:8px;padding:1.1rem;margin-top:.75rem}
+.ps-section.visible{display:block}
+.ps-section .ps-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#1A7A6E;margin-bottom:.9rem}
+.ps-field{margin-bottom:.9rem}
+.ps-field:last-child{margin-bottom:0}
+.form-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;margin-top:.35rem}
+.form-known{background:#E1F5EE;color:#0F6E56}
+.form-unknown{background:#FFF3CD;color:#856404}
+/* Priority */
+.priority-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
+@media(min-width:480px){.priority-grid{grid-template-columns:repeat(4,1fr)}}
+.priority-option{position:relative}
+.priority-option input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+.priority-label{display:block;border:2px solid #DDE3E8;border-radius:8px;padding:.6rem .5rem;text-align:center;cursor:pointer;transition:all .2s;background:white}
+.priority-label .p-code{font-size:13px;font-weight:700;color:#0E2F42;display:block}
+.priority-label .p-desc{font-size:11px;color:#6B7A8A;display:block;margin-top:2px;line-height:1.3}
+.priority-option input:checked + .priority-label{border-color:#0E2F42;background:#EBF2F8}
+/* File drop */
+.file-drop{border:2px dashed #DDE3E8;border-radius:8px;padding:1.25rem;text-align:center;cursor:pointer;color:#6B7A8A;font-size:13px;transition:all .2s}
+.file-drop:hover{border-color:#0E2F42;background:#F7F9FC}
+.file-drop input{display:none}
+/* Submit */
+.submit-btn{width:100%;padding:.9rem;background:#0E2F42;color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.02em}
+.submit-btn:hover{background:#1A4A6B}
+.submit-btn:disabled{background:#BDC3C7;cursor:not-allowed}
+.footer{text-align:center;padding:1.5rem 1rem;font-size:11px;color:#6B7A8A;line-height:1.8}
+.success-panel{display:none;background:white;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:2.5rem;text-align:center;margin-bottom:1.25rem}
+.spinner{display:none;width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="portal-header">
+  <div class="brand">New Era RTC</div>
+  <h1>Technology Support Portal</h1>
+  <div style="font-size:12px;opacity:.55;margin-top:.3rem">Powered by La Gente Consulting</div>
+  <div class="sub">PlanStreet · Microsoft 365 · Adobe · SharePoint</div>
+</div>
+
+<div class="container">
+
+  <div class="info-box" id="infoBox">
+    <strong>ℹ️ Submit a Technology Support Request</strong>
+    All requests are reviewed by Chermaene Mathis (Director of Quality Assurance) before being routed to the La Gente technology team.
+    <div style="margin-top:.5rem;font-size:12px;opacity:.8">PlanStreet changes are completed in sandbox first and pushed to production only after QA approval and La Gente sign-off. Allow 24–72 hours depending on priority.</div>
+  </div>
+
+  <div class="success-panel" id="success">
+    <div style="font-size:3rem;margin-bottom:1rem">✅</div>
+    <h2 style="color:#0E2F42;margin-bottom:.5rem">Request Submitted</h2>
+    <p style="color:#6B7A8A;font-size:14px">Your request is pending QA review by Chermaene Mathis.<br>You will receive an email confirmation shortly.</p>
+    <p style="margin-top:1rem;font-size:12px;color:#6B7A8A">Questions? <a href="mailto:support@lagenteshequity.com" style="color:#0E2F42">support@lagenteshequity.com</a></p>
+  </div>
+
+  <form id="form">
+
+    <!-- YOUR INFORMATION -->
+    <div class="card">
+      <div class="card-header">Your Information</div>
+      <div class="card-body">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="fullName" placeholder="Your full name" required>
+        </div>
+        <div class="field">
+          <label>Department <span class="req">*</span></label>
+          <select id="department" required>
+            <option value="" disabled selected>Select department…</option>
+            <option>Clinical</option>
+            <option>Direct Care</option>
+            <option>Medical / Nursing</option>
+            <option>Administrative</option>
+            <option>Compliance</option>
+            <option>Executive / Leadership</option>
+            <option>IT / Systems</option>
+            <option>Education</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>New Era Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="you@newerartc.com" required>
+        </div>
+        <div class="field">
+          <label>Phone Number <span class="opt">Optional</span></label>
+          <input type="tel" id="phone" placeholder="(555) 555-5555">
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICE TYPE -->
+    <div class="card">
+      <div class="card-header">Service Type</div>
+      <div class="card-body">
+        <div class="field">
+          <label>What type of help do you need? <span class="req">*</span></label>
+          <select id="serviceType" required onchange="handleServiceType(this.value)">
+            <option value="" disabled selected>Select service type…</option>
+            <optgroup label="PlanStreet">
+              <option value="PLANSTREET_HELP">[PLANSTREET] Form Help or Change Request</option>
+              <option value="PLANSTREET_BUG">[PLANSTREET] Bug or Error</option>
+            </optgroup>
+            <optgroup label="Microsoft 365">
+              <option value="M365">[M365] Email, Teams, or OneDrive</option>
+              <option value="SHAREPOINT">[SHAREPOINT] SharePoint</option>
+              <option value="USER_ACCESS">[USER ACCESS] New User, Termination, or Change</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="ADOBE">[ADOBE] Adobe Acrobat</option>
+              <option value="COMPLIANCE_DOC">[COMPLIANCE] Compliance Documentation</option>
+              <option value="LICENSING">[LICENSING] Add or Remove a License</option>
+              <option value="ELITE">[ELITE] Regulatory or Breach Response</option>
+              <option value="HELPDESK">[HELPDESK] General Help / Not Sure</option>
+            </optgroup>
+          </select>
+
+          <!-- PLANSTREET SUB-SECTION -->
+          <div class="ps-section" id="psSection">
+            <div class="ps-title">🗂 PlanStreet Work Order Details</div>
+
+            <div class="ps-field">
+              <label>Request Category <span class="req">*</span></label>
+              <select id="psCategory" onchange="handlePsCategory(this.value)">
+                <option value="" disabled selected>Select request category…</option>
+                <option value="PS_CREATE">Form Creation — build a new form in sandbox</option>
+                <option value="PS_MODIFY">Form Modification — edit an existing sandbox form</option>
+                <option value="PS_DELETE">Form Deletion — remove a form from sandbox</option>
+                <option value="PS_FIELD">Field Change — add, edit, or remove a specific field</option>
+                <option value="PS_LOGIC">Conditional Logic — show/hide rules, required rules, calculations</option>
+                <option value="PS_ROUTING">Form Routing / Approvals — workflow, signatures, notifications</option>
+                <option value="PS_CLONE">Form Clone — duplicate an existing form as a starting point</option>
+              </select>
+            </div>
+
+            <div class="ps-field" id="psOpField" style="display:none">
+              <label>Specific Operation <span class="req">*</span></label>
+              <select id="psOperation">
+                <option value="" disabled selected>Select operation…</option>
+              </select>
+            </div>
+
+            <div class="ps-field">
+              <label>PlanStreet Form Name <span class="req">*</span> <span class="opt">Select an existing form or choose "Other"</span></label>
+              <select id="psFormName" onchange="handleFormName(this.value)">
+                <option value="" disabled selected>Select form…</option>
+                <option value="Admission Assessment">Admission Assessment</option>
+                <option value="Service Plan / ISP">Service Plan / ISP</option>
+                <option value="Progress Note">Progress Note</option>
+                <option value="Incident Report">Incident Report</option>
+                <option value="Treatment Plan">Treatment Plan</option>
+                <option value="Discharge Summary">Discharge Summary</option>
+                <option value="Safety Plan">Safety Plan</option>
+                <option value="Behavior Support Plan">Behavior Support Plan</option>
+                <option value="Medication Administration Record (MAR)">Medication Administration Record (MAR)</option>
+                <option value="Daily Living Skills Assessment">Daily Living Skills Assessment</option>
+                <option value="Medical History & Physical">Medical History &amp; Physical</option>
+                <option value="Transition / Aftercare Plan">Transition / Aftercare Plan</option>
+                <option value="Consent to Treatment">Consent to Treatment</option>
+                <option value="Release of Information (ROI)">Release of Information (ROI)</option>
+                <option value="Crisis Plan">Crisis Plan</option>
+                <option value="Psychosocial Assessment">Psychosocial Assessment</option>
+                <option value="Case Note / Contact Note">Case Note / Contact Note</option>
+                <option value="Court / DFPS Report">Court / DFPS Report</option>
+                <option value="Face Sheet / Client Profile">Face Sheet / Client Profile</option>
+                <option value="Quarterly Review">Quarterly Review</option>
+                <option value="OTHER">Other — not listed</option>
+              </select>
+              <div id="formBadge"></div>
+            </div>
+
+            <div class="ps-field" id="psCustomFormField" style="display:none">
+              <label>Form Name (not listed) <span class="req">*</span> <span class="opt">Enter the exact name as it appears in PlanStreet</span></label>
+              <input type="text" id="psCustomForm" placeholder="Exact form name from PlanStreet">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIORITY -->
+    <div class="card">
+      <div class="card-header">Priority Level</div>
+      <div class="card-body">
+        <div class="priority-grid">
+          <div class="priority-option">
+            <input type="radio" name="priority" id="p1" value="P1">
+            <label class="priority-label" for="p1">
+              <span class="p-code">P1 — Critical</span>
+              <span class="p-desc">System down or PHI risk</span>
+            </label>
+          </div>
+          <div class="priority-option">
+            <input type="radio" name="priority" id="p2" value="P2">
+            <label class="priority-label" for="p2">
+              <span class="p-code">P2 — High</span>
+              <span class="p-desc">Multiple staff affected</span>
+            </label>
+          </div>
+          <div class="priority-option">
+            <input type="radio" name="priority" id="p3" value="P3" checked>
+            <label class="priority-label" for="p3">
+              <span class="p-code">P3 — Medium</span>
+              <span class="p-desc">Single user or standard</span>
+            </label>
+          </div>
+          <div class="priority-option">
+            <input type="radio" name="priority" id="p4" value="P4">
+            <label class="priority-label" for="p4">
+              <span class="p-code">P4 — Low</span>
+              <span class="p-desc">Non-urgent / question</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REQUEST DETAILS -->
+    <div class="card">
+      <div class="card-header">Request Details</div>
+      <div class="card-body">
+        <div class="field">
+          <label>Request Title <span class="req">*</span></label>
+          <input type="text" id="title" placeholder="Short summary like an email subject line" required>
+        </div>
+        <div class="field">
+          <label>Describe Your Request <span class="req">*</span></label>
+          <textarea id="description" rows="5" placeholder="1. What system or form?&#10;2. What are you trying to do?&#10;3. What's happening instead?" required></textarea>
+        </div>
+        <div class="field">
+          <label>Attachments <span class="opt">Screenshots, PDFs, or documents · Max 10 MB each, up to 5 files</span></label>
+          <div class="file-drop" onclick="document.getElementById('files').click()">
+            <input type="file" id="files" multiple accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.txt" onchange="showFiles(this)">
+            <span style="font-size:1.5rem;display:block;margin-bottom:.4rem">📎</span>
+            Click to choose files or drag them here
+            <div style="font-size:11px;margin-top:.3rem;opacity:.7">PDF, images, Word, Excel · Max 10 MB each</div>
+          </div>
+          <div id="fileList" style="margin-top:.5rem;font-size:12px;color:#34495E"></div>
+        </div>
+        <div class="field">
+          <label>Compliance or Regulatory Requirement?</label>
+          <select id="compliance">
+            <option value="">Not applicable</option>
+            <option>DFPS CCL inspection or audit</option>
+            <option>Texas HHS requirement</option>
+            <option>HIPAA / 42 CFR Part 2</option>
+            <option>CARF accreditation</option>
+            <option>Grant or contract requirement</option>
+            <option>Staff training or certification</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:white;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:13px;color:#6B7A8A;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+      What happens next? <strong style="color:#0E2F42">Chermaene Mathis</strong> will review and approve before routing to the La Gente technology team.
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      <span id="btnText">Submit to QA Review</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+  </form>
+</div>
+
+<div class="footer">
+  <strong style="color:#2C3E50;display:block;margin-bottom:.3rem">New Era Residential Treatment Centers · Technology Support Portal</strong>
+  Managed by La Gente Consulting, LLC · SDVOSB · <a href="mailto:support@lagenteshequity.com" style="color:#0E2F42">support@lagenteshequity.com</a>
+</div>
+
+<script>
+const PA_WEBHOOK = 'https://prod-07.westus.logic.azure.com:443/workflows/42fac4744b9d49238df9fa3a158b28ce/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Fq3oGwKNqkTuDlkPBNyvYw5Hnl0XqQpQ7nNhQZGJMGc';
+
+const KNOWN_FORMS = new Set(['Admission Assessment','Service Plan / ISP','Progress Note','Incident Report','Treatment Plan','Discharge Summary','Safety Plan','Behavior Support Plan','Medication Administration Record (MAR)','Daily Living Skills Assessment','Medical History & Physical','Transition / Aftercare Plan','Consent to Treatment','Release of Information (ROI)','Crisis Plan','Psychosocial Assessment','Case Note / Contact Note','Court / DFPS Report','Face Sheet / Client Profile','Quarterly Review']);
+
+const PS_OPERATIONS = {
+  PS_CREATE: ['Create form from scratch','Clone and modify existing form','Build from provided wireframe/spec'],
+  PS_MODIFY: ['Update field labels or instructions','Change field type','Add new field','Remove existing field','Reorder fields','Update dropdown options'],
+  PS_DELETE: ['Archive form (keep records)','Delete form and all records','Remove form from specific program'],
+  PS_FIELD: ['Add a new field','Edit existing field','Remove a field','Change field type','Update dropdown/checkbox options'],
+  PS_LOGIC: ['Add show/hide rule','Add required-if rule','Add calculated field','Update existing logic rule','Remove logic rule'],
+  PS_ROUTING: ['Add signature step','Change approver','Add notification email','Update routing sequence','Remove a routing step'],
+  PS_CLONE: ['Clone form to same program','Clone form to different program','Clone and modify for new use']
+};
+
+function handleServiceType(val) {
+  const ps = document.getElementById('psSection');
+  const cat = document.getElementById('psCategory');
+  const op = document.getElementById('psOperation');
+  const fn = document.getElementById('psFormName');
+  if (val === 'PLANSTREET_HELP') {
+    ps.classList.add('visible');
+    cat.required = true;
+    fn.required = true;
+  } else {
+    ps.classList.remove('visible');
+    cat.required = false;
+    op.required = false;
+    fn.required = false;
+  }
+}
+
+function handlePsCategory(val) {
+  const opField = document.getElementById('psOpField');
+  const opSel = document.getElementById('psOperation');
+  const ops = PS_OPERATIONS[val] || [];
+  if (ops.length) {
+    opSel.innerHTML = '<option value="" disabled selected>Select operation…</option>' +
+      ops.map(o => `<option value="${o}">${o}</option>`).join('');
+    opField.style.display = 'block';
+    opSel.required = true;
+  } else {
+    opField.style.display = 'none';
+    opSel.required = false;
+  }
+}
+
+function handleFormName(val) {
+  const badge = document.getElementById('formBadge');
+  const customField = document.getElementById('psCustomFormField');
+  const customInput = document.getElementById('psCustomForm');
+  if (val === 'OTHER') {
+    badge.innerHTML = '';
+    customField.style.display = 'block';
+    customInput.required = true;
+  } else if (val) {
+    customField.style.display = 'none';
+    customInput.required = false;
+    const known = KNOWN_FORMS.has(val);
+    badge.innerHTML = known
+      ? '<span class="form-badge form-known">✓ Known form — on file in sandbox. La Gente has access to this form.</span>'
+      : '<span class="form-badge form-unknown">⚠ This form is not in our current sandbox inventory. Please describe it in the request details.</span>';
+  }
+}
+
+function showFiles(input) {
+  document.getElementById('fileList').innerHTML = Array.from(input.files)
+    .map(f => `<div style="padding:4px 0;border-bottom:1px solid #f0f0f0">📄 ${f.name} <span style="color:#95A5A6">(${(f.size/1024).toFixed(0)} KB)</span></div>`)
+    .join('');
+}
+
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const txt = document.getElementById('btnText');
+  const spin = document.getElementById('spinner');
+  btn.disabled = true;
+  txt.style.display = 'none';
+  spin.style.display = 'block';
+
+  const svc = document.getElementById('serviceType').value;
+  const isPlanStreet = svc === 'PLANSTREET_HELP';
+
+  const payload = {
+    fullName: document.getElementById('fullName').value.trim(),
+    department: document.getElementById('department').value,
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    serviceType: svc,
+    priority: (document.querySelector('input[name=priority]:checked') || {}).value || 'P3',
+    title: document.getElementById('title').value.trim(),
+    description: document.getElementById('description').value.trim(),
+    compliance: document.getElementById('compliance').value,
+    submittedAt: new Date().toISOString()
+  };
+
+  if (isPlanStreet) {
+    payload.psCategory = document.getElementById('psCategory').value;
+    payload.psOperation = document.getElementById('psOperation').value;
+    const fn = document.getElementById('psFormName').value;
+    payload.psFormName = fn === 'OTHER'
+      ? document.getElementById('psCustomForm').value.trim()
+      : fn;
+    payload.psFormKnown = fn !== 'OTHER' && KNOWN_FORMS.has(fn);
+  }
+
+  try {
+    await fetch(PA_WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      mode: 'no-cors',
+      body: JSON.stringify(payload)
+    });
+  } catch(err) { console.log(err); }
+
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('success').style.display = 'block';
+  document.getElementById('infoBox').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+</script>
+</body>
+</html>
