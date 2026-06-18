@@ -319,7 +319,10 @@ function handleServiceType(val) {
   const cat = document.getElementById('psCategory');
   const op = document.getElementById('psOperation');
   const fn = document.getElementById('psFormName');
-  if (val === 'PLANSTREET_HELP') {
+  const customInput = document.getElementById('psCustomForm');
+  const isPlanStreet = val === 'PLANSTREET_HELP' || val === 'PLANSTREET_BUG';
+
+  if (isPlanStreet) {
     ps.classList.add('visible');
     cat.required = true;
     fn.required = true;
@@ -328,6 +331,10 @@ function handleServiceType(val) {
     cat.required = false;
     op.required = false;
     fn.required = false;
+    fn.value = '';
+    cat.value = '';
+    op.value = '';
+    if (customInput) customInput.required = false;
   }
 }
 
@@ -370,54 +377,135 @@ function showFiles(input) {
     .join('');
 }
 
+function fileToAttachment(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result || '';
+      const contentBytes = String(result).includes(',')
+        ? String(result).split(',')[1]
+        : String(result);
+
+      resolve({
+        name: file.name,
+        contentType: file.type || 'application/octet-stream',
+        size: file.size,
+        contentBytes: contentBytes
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function getAttachments() {
+  const input = document.getElementById('files');
+  const files = Array.from(input.files || []);
+
+  if (files.length > 5) {
+    throw new Error('Please attach no more than 5 files.');
+  }
+
+  const maxSize = 10 * 1024 * 1024;
+  const tooLarge = files.find(file => file.size > maxSize);
+  if (tooLarge) {
+    throw new Error(`${tooLarge.name} is larger than 10 MB.`);
+  }
+
+  return Promise.all(files.map(fileToAttachment));
+}
+
+
 document.getElementById('form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
   const txt = document.getElementById('btnText');
   const spin = document.getElementById('spinner');
+
   btn.disabled = true;
   txt.style.display = 'none';
   spin.style.display = 'block';
 
-  const svc = document.getElementById('serviceType').value;
-  const isPlanStreet = svc === 'PLANSTREET_HELP';
-
-  const payload = {
-    fullName: document.getElementById('fullName').value.trim(),
-    department: document.getElementById('department').value,
-    email: document.getElementById('email').value.trim(),
-    phone: document.getElementById('phone').value.trim(),
-    serviceType: svc,
-    priority: (document.querySelector('input[name=priority]:checked') || {}).value || 'P3',
-    title: document.getElementById('title').value.trim(),
-    description: document.getElementById('description').value.trim(),
-    compliance: document.getElementById('compliance').value,
-    submittedAt: new Date().toISOString()
-  };
-
-  if (isPlanStreet) {
-    payload.psCategory = document.getElementById('psCategory').value;
-    payload.psOperation = document.getElementById('psOperation').value;
-    const fn = document.getElementById('psFormName').value;
-    payload.psFormName = fn === 'OTHER'
-      ? document.getElementById('psCustomForm').value.trim()
-      : fn;
-    payload.psFormKnown = fn !== 'OTHER' && KNOWN_FORMS.has(fn);
-  }
-
   try {
+    const svc = document.getElementById('serviceType').value;
+    const isPlanStreet = svc === 'PLANSTREET_HELP' || svc === 'PLANSTREET_BUG';
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const department = document.getElementById('department').value;
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const priority = (document.querySelector('input[name=priority]:checked') || {}).value || 'P3';
+    const title = document.getElementById('title').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const compliance = document.getElementById('compliance').value || 'Not applicable';
+    const submittedAt = new Date().toISOString();
+    const attachments = await getAttachments();
+
+    const psCategory = isPlanStreet ? document.getElementById('psCategory').value : '';
+    const psOperation = isPlanStreet ? document.getElementById('psOperation').value : '';
+    const selectedForm = isPlanStreet ? document.getElementById('psFormName').value : '';
+    const psFormName = selectedForm === 'OTHER'
+      ? document.getElementById('psCustomForm').value.trim()
+      : selectedForm;
+    const psFormKnown = isPlanStreet && selectedForm !== 'OTHER' && KNOWN_FORMS.has(psFormName);
+
+    const payload = {
+      // Current field names
+      fullName: fullName,
+      department: department,
+      email: email,
+      phone: phone,
+      serviceType: svc,
+      priority: priority,
+      title: title,
+      description: description,
+      compliance: compliance,
+      submittedAt: submittedAt,
+
+      // Legacy/flow-compatible field names
+      requesterName: fullName,
+      requesterEmail: email,
+      subject: title,
+      content: description,
+      complianceDriver: compliance,
+      formName: psFormName,
+
+      // PlanStreet current field names
+      psCategory: psCategory,
+      psOperation: psOperation,
+      psFormName: psFormName,
+      psFormKnown: psFormKnown,
+
+      // PlanStreet legacy/flow-compatible field names
+      planstreetCategory: psCategory,
+      planstreetOperation: psOperation,
+      planstreetFormName: psFormName,
+      planstreetFormKnown: psFormKnown,
+      planstreetBugForm: svc === 'PLANSTREET_BUG' ? psFormName : '',
+
+      // Files: always send an array, even when empty
+      attachments: attachments,
+      source: 'portal'
+    };
+
     await fetch(PA_WEBHOOK, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       mode: 'no-cors',
       body: JSON.stringify(payload)
     });
-  } catch(err) { console.log(err); }
 
-  document.getElementById('form').style.display = 'none';
-  document.getElementById('success').style.display = 'block';
-  document.getElementById('infoBox').style.display = 'none';
-  window.scrollTo({top:0, behavior:'smooth'});
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    document.getElementById('infoBox').style.display = 'none';
+    window.scrollTo({top:0, behavior:'smooth'});
+  } catch(err) {
+    alert(err.message || 'Something went wrong while submitting your request.');
+    btn.disabled = false;
+    txt.style.display = 'inline';
+    spin.style.display = 'none';
+    console.log(err);
+  }
 });
 </script>
 </body>
